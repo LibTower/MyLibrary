@@ -41,9 +41,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         recyclerView.adapter = BookAdapter(
-            BookRepository.getBooks()
-        ) { book ->
-            // пока клик пустой или позже сделаем редактирование
-        }
+            BookRepository.getBooks().toMutableList(),
+            { book ->
+                val intent = Intent(this, NewBookActivity::class.java)
+                intent.putExtra("bookId", book.id)
+                startActivity(intent)
+            },
+            { id ->
+                BookRepository.delBook(id)
+            }
+        )
     }
 }

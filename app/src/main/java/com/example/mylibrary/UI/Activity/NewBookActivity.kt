@@ -1,6 +1,5 @@
 package com.example.mylibrary.UI.Activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -17,6 +16,7 @@ class NewBookActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_new_book)
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -28,18 +28,33 @@ class NewBookActivity : AppCompatActivity() {
         val title = findViewById<EditText>(R.id.BookTitle)
         val author = findViewById<EditText>(R.id.BookAuthor)
 
+        val book = BookRepository.getBookById(
+            intent.getIntExtra("bookId", -1)
+        )
+
         backButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
+        book?.let {
+            title.setText(it.title)
+            author.setText(it.author)
         }
 
         saveButton.setOnClickListener {
-            BookRepository.addBook(
-                Book(
-                    id = 0,
-                    title.text.toString(),
-                    author.text.toString()
-                )
+
+            val newBook = Book(
+                id = book?.id ?: 0,
+                title = title.text.toString(),
+                author = author.text.toString()
             )
+
+            if (book == null) {
+                BookRepository.addBook(newBook)
+            } else {
+                BookRepository.updateMyBook(newBook)
+            }
+
             finish()
         }
     }

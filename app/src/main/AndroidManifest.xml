@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyLibrary">
         <activity
+            android:name=".UI.Activity.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UI.Activity.RegisterActivity"
+            android:exported="false" />
+        <activity
             android:name=".UI.Activity.NewBookActivity"
             android:exported="false" />
         <activity

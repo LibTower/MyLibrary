@@ -12,12 +12,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mylibrary.R
 import com.example.mylibrary.UI.Adapter.BookAdapter
 import com.example.mylibrary.repository.BookRepository
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val auth = FirebaseAuth.getInstance()
+
+        if(auth.currentUser == null) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
+
         setContentView(R.layout.activity_main)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -32,6 +43,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, NewBookActivity::class.java))
         }
     }
+
 
     override fun onResume() {
         super.onResume()
